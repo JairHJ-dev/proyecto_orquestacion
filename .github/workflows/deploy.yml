@@ -1,0 +1,25 @@
+name: Blue-Green Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Se ejecutará cada vez que hagas un push a la rama principal
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Ejecutar Despliegue en Servidor VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            # Nos movemos a tu carpeta y ejecutamos el cerebro del despliegue
+            cd /home/jair_herrrera
+            ./auto_deploy.sh
